@@ -5,11 +5,13 @@ import { useState, useEffect } from "react";
 import { Menu, X, Github, Linkedin, Mail, Phone, MapPin, Heart, ExternalLink, Download, Sun, Moon } from 'lucide-react';
 import { useDarkMode } from "../../context/DarkModeContext";
 
+
 const Footer = () => {
     const { isDarkMode } = useDarkMode();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
+    const currentYear = new Date().getFullYear();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -124,7 +126,7 @@ const Footer = () => {
                     {/* Bottom Bar */}
                     <div className={`mt-12 pt-8 border-t ${isDarkMode ? 'border-gray-800' : 'border-gray-200'} flex flex-col md:flex-row justify-between items-center`}>
                         <div className={`flex items-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            <span>© 2024 Mayur Kumar Garchar. Made with</span>
+                            <span>© {currentYear} Mayur Kumar Garchar. Made with</span>
                             <Heart className="w-4 h-4 mx-1 text-red-500 fill-current" />
                             <span>and lots of coffee.</span>
                         </div>
