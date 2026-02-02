@@ -188,8 +188,5 @@
   color: white;
   font-family: "Inter", sans-serif;
 
-  /* Additional layout properties to match button behavior */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* Additional layout properties handled by component utility classes */
 }

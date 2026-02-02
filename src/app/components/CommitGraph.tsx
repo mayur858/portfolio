@@ -28,6 +28,26 @@ const CommitGraph = () => {
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [totalCommits, setTotalCommits] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [blockSize, setBlockSize] = useState(12);
+  const [blockMargin, setBlockMargin] = useState(4);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setBlockSize(9);
+        setBlockMargin(2);
+      } else {
+        setBlockSize(12);
+        setBlockMargin(4);
+      }
+    };
+
+    // Set initial size
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,8 +113,8 @@ const CommitGraph = () => {
             dark: ["#27272a", "#0e4429", "#006d32", "#26a641", "#39d353"],
           }}
           colorScheme={isDarkMode ? "dark" : "light"}
-          blockSize={12}
-          blockMargin={4}
+          blockSize={blockSize}
+          blockMargin={blockMargin}
           renderBlock={(block: BlockElement, activity: Activity) => {
             return React.cloneElement(block, {
               "data-tooltip-id": "github-tooltip",

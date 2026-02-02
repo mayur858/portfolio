@@ -1,21 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useState } from "react";
-import {
-  Menu,
-  X,
-  Github,
-  Linkedin,
-  Mail,
-  Phone,
-  MapPin,
-  Heart,
-  ExternalLink,
-  Download,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useDarkMode } from "../../context/DarkModeContext";
@@ -26,7 +12,6 @@ import ThreeHero from "../ThreeHero";
 const HomePage = () => {
   // Remove local dark mode state and use context
   const { isDarkMode } = useDarkMode();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -37,26 +22,8 @@ const HomePage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Skills", href: "#skills" },
-    { name: "Experience", href: "#experience" },
-  ];
-
-  const socialLinks = [
-    { icon: Github, href: "https://github.com/mayur858", label: "GitHub" },
-    {
-      icon: Linkedin,
-      href: "https://www.linkedin.com/in/mayur-kumar-garchar/",
-      label: "LinkedIn",
-    },
-    { icon: Mail, href: "mailto:kumarmayur.2001@gmail.com", label: "Email" },
-  ];
-
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen w-full bg-background text-foreground">
       {/* Main Content Area */}
       <main className="pt-20">
         {/* Hero Section */}
@@ -76,7 +43,7 @@ const HomePage = () => {
                 I build cross-platform apps and smart software solutions with
                 clean code and a passion for innovation.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-row flex-wrap gap-4 justify-center">
                 <Button
                   asChild
                   size="lg"
@@ -106,22 +73,17 @@ const HomePage = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
               About Me
             </h2>
-            <div className="bg-card/50 backdrop-blur-sm border rounded-2xl p-8 shadow-sm">
-              <p className="text-center text-lg md:text-xl max-w-4xl mx-auto text-muted-foreground leading-relaxed">
-                Hello, I’m Mayur Kumar Garchar — a passionate Software Developer
-                with expertise in building scalable web and mobile solutions. My
-                journey spans from crafting high-performance marketing websites
-                using Next.js and MongoDB to developing complex cross-platform
-                mobile applications with Flutter. I specialize in backend logic
-                with Node.js and Express when complexity demands, ensuring every
-                solution is robust and efficient. From internships building
-                accounting software in .NET to developing modern web platforms,
-                I focus on clean code and user-centric design. Beyond coding, I
-                explore machine learning with TensorFlow, always eager to
-                integrate AI into practical applications. I'm committed to
-                continuous learning and building software that makes an impact.
+            <div className="bg-card/50 backdrop-blur-sm border rounded-2xl p-2 md:p-8 shadow-sm">
+              <p className="text-center text-sm md:text-xl max-w-4xl mx-auto text-muted-foreground leading-relaxed">
+                I’m Mayur Kumar Garchar, a Software Developer crafting scalable
+                web and mobile apps using Next.js, MongoDB, and Flutter. With
+                expertise spanning from .NET to modern web architectures, I
+                specialize in building robust backends with Node.js and Express.
+                Focused on clean code and user-centric design, I also explore
+                machine learning with TensorFlow to create impactful, innovative
+                solutions.
               </p>
-              <div className="mt-12">
+              <div className="mt-12 w-full">
                 <CommitGraph />
               </div>
             </div>

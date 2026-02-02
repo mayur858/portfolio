@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
+import BorderGradientButton from "../ui/BorderGradientButton";
 import { useState } from "react";
 import {
   Menu,
@@ -22,7 +23,6 @@ const Header = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const buttonRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,26 +31,6 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const element = buttonRef.current;
-    if (!element) return;
-
-    let angle = 0;
-    let animationFrameId: number;
-
-    const rotateGradient = () => {
-      angle = (angle + 1) % 360;
-      element.style.setProperty("--gradient-angle", `${angle}deg`);
-      animationFrameId = requestAnimationFrame(rotateGradient);
-    };
-
-    rotateGradient();
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isMenuOpen]);
 
   const navItems = [
     { name: "Home", href: "#home" },
@@ -75,7 +55,7 @@ const Header = () => {
     <header
       className={`fixed z-50 transition-all duration-500  ${
         isScrolled
-          ? `top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-5xl ${
+          ? `top-4 left-1/2 -translate-x-1/2 w-[98%] max-w-5xl ${
               isMenuOpen
                 ? "rounded-3xl bg-background"
                 : "rounded-full bg-background/80"
@@ -94,10 +74,10 @@ const Header = () => {
               <h1 className="text-xl font-bold text-foreground">
                 Mayur Kumar Garchar
               </h1>
-              <p className="text-sm text-muted-foreground">
+              {/* <p className="text-sm text-muted-foreground">
                 {" "}
                 Software Developer
-              </p>
+              </p> */}
             </div>
           </div>
 
@@ -129,14 +109,14 @@ const Header = () => {
             </button>
 
             {/* Resume download */}
-            <a
+            <BorderGradientButton
               href="Mayur_s_Resume.pdf"
               download
-              className="hidden sm:flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200"
+              className="hidden sm:flex px-8 py-3 text-sm font-medium transition-transform hover:scale-105"
             >
               <Download className="w-4 h-4 mr-2" />
               Resume
-            </a>
+            </BorderGradientButton>
 
             {/* Mobile menu button */}
             <button
@@ -171,16 +151,15 @@ const Header = () => {
                 {item.name}
               </a>
             ))}
-            <a
-              ref={buttonRef}
+            <BorderGradientButton
               href="Mayur_s_Resume.pdf"
               download
-              className="border-gradient cursor-pointer"
+              className="cursor-pointer"
               style={{ width: "250px", height: "80px" }}
             >
               <Download className="w-4 h-4 mr-2" />
-              Download Resume
-            </a>
+              Resume
+            </BorderGradientButton>
           </div>
         </div>
       )}
