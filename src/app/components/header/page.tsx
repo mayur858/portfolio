@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import {
   Menu,
@@ -22,6 +22,7 @@ const Header = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +31,26 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const element = buttonRef.current;
+    if (!element) return;
+
+    let angle = 0;
+    let animationFrameId: number;
+
+    const rotateGradient = () => {
+      angle = (angle + 1) % 360;
+      element.style.setProperty("--gradient-angle", `${angle}deg`);
+      animationFrameId = requestAnimationFrame(rotateGradient);
+    };
+
+    rotateGradient();
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isMenuOpen]);
 
   const navItems = [
     { name: "Home", href: "#home" },
@@ -54,7 +75,11 @@ const Header = () => {
     <header
       className={`fixed z-50 transition-all duration-500  ${
         isScrolled
-          ? "top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-5xl rounded-full border border-border/40 bg-background/80 backdrop-blur-md shadow-lg dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+          ? `top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-5xl ${
+              isMenuOpen
+                ? "rounded-3xl bg-background"
+                : "rounded-full bg-background/80"
+            } border border-border/40 backdrop-blur-md shadow-lg dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]`
           : "top-0 left-0 w-full bg-transparent"
       }`}
     >
@@ -105,7 +130,7 @@ const Header = () => {
 
             {/* Resume download */}
             <a
-              href="/Mayur_s_Resume.pdf"
+              href="Mayur_s_Resume.pdf"
               download
               className="hidden sm:flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200"
             >
@@ -130,8 +155,12 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-background border-t border-border mt-2 rounded-b-2xl shadow-xl">
-          <div className="px-4 py-6 space-y-4">
+        <div
+          className={`md:hidden border-t border-border mt-2 ${
+            isScrolled ? "pb-4" : "bg-background rounded-b-2xl shadow-xl"
+          }`}
+        >
+          <div className="px-4 py-6 space-y-4 flex flex-col items-center">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -143,9 +172,11 @@ const Header = () => {
               </a>
             ))}
             <a
-              href="/Mayur_s_Resume.pdf"
+              ref={buttonRef}
+              href="Mayur_s_Resume.pdf"
               download
-              className="flex items-center w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-200"
+              className="border-gradient cursor-pointer"
+              style={{ width: "250px", height: "80px" }}
             >
               <Download className="w-4 h-4 mr-2" />
               Download Resume

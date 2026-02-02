@@ -65,25 +65,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4 text-foreground">
-              Quick Links
-            </h4>
-            <ul className="space-y-2">
-              {navItems.slice(0, 4).map((item) => (
-                <li key={item.name}>
-                  <a
-                    href={item.href}
-                    className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                  >
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Contact Info */}
           <div>
             <h4
