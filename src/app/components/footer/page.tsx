@@ -1,6 +1,7 @@
 "use client";
 
 import { Github, Linkedin, Mail, MapPin, Phone, Heart } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -22,9 +23,14 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg">MK</span>
-              </div>
+              <Avatar className="w-10 h-10">
+                <AvatarImage
+                  className="grayscale"
+                  src="/profile.jpg"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>MK</AvatarFallback>
+              </Avatar>
               <div className="ml-3">
                 <h3 className="text-xl font-bold text-foreground">
                   Mayur Kumar Garchar

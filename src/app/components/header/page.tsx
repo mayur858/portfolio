@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import BorderGradientButton from "../ui/BorderGradientButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu, X, Download, Sun, Moon } from "lucide-react";
 import { useDarkMode } from "../../context/DarkModeContext";
 
@@ -43,9 +44,14 @@ const Header = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">MK</span>
-            </div>
+            <Avatar className="w-10 h-10">
+              <AvatarImage
+                className="grayscale"
+                src="/profile.jpg"
+                alt="@shadcn"
+              />
+              <AvatarFallback>MK</AvatarFallback>
+            </Avatar>
             <div className="ml-3">
               <h1 className="text-xl font-bold text-foreground">
                 Mayur Kumar Garchar
