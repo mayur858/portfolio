@@ -1,27 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Github, Linkedin, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useDarkMode } from "../../context/DarkModeContext";
 import CommitGraph from "../CommitGraph";
-
 import ThreeHero from "../ThreeHero";
 
 const HomePage = () => {
-  // Remove local dark mode state and use context
-  const { isDarkMode } = useDarkMode();
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
       {/* Main Content Area */}

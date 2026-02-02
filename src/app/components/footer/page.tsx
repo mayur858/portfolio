@@ -1,20 +1,9 @@
 "use client";
 
-import React from "react";
 import { Github, Linkedin, Mail, MapPin, Phone, Heart } from "lucide-react";
-import { useDarkMode } from "../../context/DarkModeContext";
 
 const Footer = () => {
-  const { isDarkMode } = useDarkMode();
   const currentYear = new Date().getFullYear();
-
-  const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Skills", href: "#skills" },
-    { name: "Experience", href: "#experience" },
-  ];
 
   const socialLinks = [
     { icon: Github, href: "https://github.com/mayur858", label: "GitHub" },
@@ -28,7 +17,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-muted/40 border-t border-border/40 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-2">
@@ -45,7 +34,7 @@ const Footer = () => {
                 </p>
               </div>
             </div>
-            <p className="text-muted-foreground mb-6 max-w-md leading-relaxed">
+            <p className="text-sm md:text-base text-muted-foreground mb-6 max-w-md leading-relaxed">
               Passionate about creating innovative solutions that make a
               difference. Always learning, always building, always improving.
             </p>
@@ -103,7 +92,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
+        <div className="mt-8 md:mt-12 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
           <div className="flex items-center">
             <span>© {currentYear} Mayur Kumar Garchar. Made with</span>
             <Heart className="w-4 h-4 mx-1 text-red-500 fill-current animate-pulse" />

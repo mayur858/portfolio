@@ -1,22 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import BorderGradientButton from "../ui/BorderGradientButton";
-import { useState } from "react";
-import {
-  Menu,
-  X,
-  Github,
-  Linkedin,
-  Mail,
-  Phone,
-  MapPin,
-  Heart,
-  ExternalLink,
-  Download,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { Menu, X, Download, Sun, Moon } from "lucide-react";
 import { useDarkMode } from "../../context/DarkModeContext";
 
 const Header = () => {
@@ -39,16 +25,6 @@ const Header = () => {
     { name: "Skills", href: "#skills" },
     { name: "Experience", href: "#experience" },
     { name: "Contact", href: "#get-in-touch" },
-  ];
-
-  const socialLinks = [
-    { icon: Github, href: "https://github.com/mayur858", label: "GitHub" },
-    {
-      icon: Linkedin,
-      href: "https://www.linkedin.com/in/mayur-kumar-garchar/",
-      label: "LinkedIn",
-    },
-    { icon: Mail, href: "mailto:kumarmayur.2001@gmail.com", label: "Email" },
   ];
 
   return (
@@ -154,8 +130,7 @@ const Header = () => {
             <BorderGradientButton
               href="Mayur_s_Resume.pdf"
               download
-              className="cursor-pointer"
-              style={{ width: "250px", height: "80px" }}
+              className="cursor-pointer px-6 py-3 text-sm font-medium w-full max-w-[200px]"
             >
               <Download className="w-4 h-4 mr-2" />
               Resume
