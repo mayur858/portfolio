@@ -28,6 +28,26 @@ const Header = () => {
     { name: "Contact", href: "#get-in-touch" },
   ];
 
+  const handleScrollToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    e.preventDefault();
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
     <header
       className={`fixed z-50 transition-all duration-500  ${
@@ -47,7 +67,7 @@ const Header = () => {
             <Avatar className="w-10 h-10">
               <AvatarImage
                 className="grayscale"
-                src="/profile.jpg"
+                src="profile.jpg"
                 alt="@shadcn"
               />
               <AvatarFallback>MK</AvatarFallback>
@@ -69,7 +89,8 @@ const Header = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium transition-colors duration-200 text-foreground/80 hover:text-primary"
+                onClick={(e) => handleScrollToSection(e, item.href)}
+                className="text-sm font-medium transition-colors duration-200 text-foreground/80 hover:text-primary cursor-pointer"
               >
                 {item.name}
               </a>
@@ -128,7 +149,7 @@ const Header = () => {
                 key={item.name}
                 href={item.href}
                 className="block text-lg font-medium transition-colors duration-200 text-foreground hover:text-primary"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={(e) => handleScrollToSection(e, item.href)}
               >
                 {item.name}
               </a>

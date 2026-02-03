@@ -26,7 +26,7 @@ const Footer = () => {
               <Avatar className="w-10 h-10">
                 <AvatarImage
                   className="grayscale"
-                  src="/profile.jpg"
+                  src="profile.jpg"
                   alt="@shadcn"
                 />
                 <AvatarFallback>MK</AvatarFallback>
