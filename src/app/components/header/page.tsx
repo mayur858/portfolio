@@ -13,7 +13,7 @@ const Header = () => {
   const resumeLongPressTimer = useRef<number | null>(null);
   const resumeLongPressTriggered = useRef(false);
 
-  const resumeHref = "/Mayur_s_Resume.pdf";
+  const resumeHref = "Mayur_s_Resume.pdf";
   const resumeDownloadName = "Mayur_Kumar_Garchar_Resume.pdf";
 
   useEffect(() => {
@@ -243,3 +243,4 @@ const Header = () => {
 };
 
 export default Header;
+
