@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import BorderGradientButton from "../ui/BorderGradientButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Menu, X, Download, Sun, Moon } from "lucide-react";
+import { Menu, X, Download, Sun, Moon, Eye } from "lucide-react";
 import { useDarkMode } from "../../context/DarkModeContext";
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const resumeLongPressTimer = useRef<number | null>(null);
+  const resumeLongPressTriggered = useRef(false);
+
+  const resumeHref = "/Mayur_s_Resume.pdf";
+  const resumeDownloadName = "Mayur_Kumar_Garchar_Resume.pdf";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +22,14 @@ const Header = () => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (resumeLongPressTimer.current) {
+        window.clearTimeout(resumeLongPressTimer.current);
+      }
+    };
   }, []);
 
   const navItems = [
@@ -48,11 +61,49 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
+  const clearResumeLongPress = () => {
+    if (resumeLongPressTimer.current) {
+      window.clearTimeout(resumeLongPressTimer.current);
+      resumeLongPressTimer.current = null;
+    }
+  };
+
+  const openResumePreview = () => {
+    window.location.assign(resumeHref);
+  };
+
+  const handleResumePressStart = (e: React.PointerEvent<HTMLAnchorElement>) => {
+    if (e.pointerType === "mouse") return;
+
+    resumeLongPressTriggered.current = false;
+    clearResumeLongPress();
+
+    resumeLongPressTimer.current = window.setTimeout(() => {
+      resumeLongPressTriggered.current = true;
+      openResumePreview();
+      setIsMenuOpen(false);
+    }, 650);
+  };
+
+  const handleResumePressEnd = () => {
+    clearResumeLongPress();
+  };
+
+  const handleMobileResumeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (resumeLongPressTriggered.current) {
+      e.preventDefault();
+      resumeLongPressTriggered.current = false;
+      return;
+    }
+
+    setIsMenuOpen(false);
+  };
+
   return (
     <header
-      className={`fixed z-50 transition-all duration-500  ${
+      className={`fixed z-50 transition-all duration-650  ${
         isScrolled
-          ? `top-4 left-1/2 -translate-x-1/2 w-[98%] max-w-5xl ${
+          ? `top-4 left-1/2 -translate-x-1/2 w-[98%] max-w-7xl ${
               isMenuOpen
                 ? "rounded-3xl bg-background"
                 : "rounded-full bg-background/80"
@@ -111,15 +162,29 @@ const Header = () => {
               )}
             </button>
 
-            {/* Resume download */}
-            <BorderGradientButton
-              href="Mayur_s_Resume.pdf"
-              download
-              className="hidden sm:flex px-8 py-3 text-sm font-medium transition-transform hover:scale-105"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Resume
-            </BorderGradientButton>
+            {/* Resume actions */}
+            <div className="hidden sm:flex items-center gap-2">
+              <BorderGradientButton
+                href={resumeHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 text-sm font-medium transition-transform hover:scale-105"
+                aria-label="View resume in a new tab"
+                title="View resume"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Resume
+              </BorderGradientButton>
+              <a
+                href={resumeHref}
+                download={resumeDownloadName}
+                className="p-3 rounded-full border border-border/60 text-foreground transition-colors duration-200 hover:bg-accent hover:text-accent-foreground"
+                aria-label="Download resume"
+                title="Download resume"
+              >
+                <Download className="w-4 h-4" />
+              </a>
+            </div>
 
             {/* Mobile menu button */}
             <button
@@ -155,9 +220,17 @@ const Header = () => {
               </a>
             ))}
             <BorderGradientButton
-              href="Mayur_s_Resume.pdf"
-              download
-              className="cursor-pointer px-6 py-3 text-sm font-medium w-full max-w-[200px]"
+              href={resumeHref}
+              download={resumeDownloadName}
+              className="cursor-pointer select-none touch-manipulation px-6 py-3 text-sm font-medium w-full max-w-[200px]"
+              onPointerDown={handleResumePressStart}
+              onPointerUp={handleResumePressEnd}
+              onPointerCancel={handleResumePressEnd}
+              onPointerLeave={handleResumePressEnd}
+              onClick={handleMobileResumeClick}
+              onContextMenu={(e) => e.preventDefault()}
+              aria-label="Tap to download resume. Press and hold to view resume."
+              title="Tap to download. Press and hold to view."
             >
               <Download className="w-4 h-4 mr-2" />
               Resume

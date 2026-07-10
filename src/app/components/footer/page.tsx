@@ -17,11 +17,11 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-muted/40 border-t border-border/40 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-muted/40 border-t border-border/40 backdrop-blur-sm ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 ">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2 md:gap-16">
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="mx-auto w-full max-w-md md:mx-0">
             <div className="flex items-center mb-4">
               <Avatar className="w-10 h-10">
                 <AvatarImage
@@ -61,7 +61,7 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div>
+          <div className="mx-auto w-full max-w-md md:mx-0 md:justify-self-end">
             <h4
               id="get-in-touch"
               className="text-lg font-semibold mb-4 text-foreground"
@@ -98,9 +98,9 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-8 md:mt-12 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
+        <div className="mt-8 md:mt-12 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-center items-center text-sm text-muted-foreground">
           <div className="flex items-center">
-            <span>© {currentYear} Mayur Kumar Garchar. Made with</span>
+            <span>&copy; {currentYear} Mayur Kumar Garchar. Made with</span>
             <Heart className="w-4 h-4 mx-1 text-red-500 fill-current animate-pulse" />
             <span>and lots of coffee.</span>
           </div>
@@ -111,3 +111,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

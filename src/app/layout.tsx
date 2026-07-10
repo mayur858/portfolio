@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import Script from "next/script";
 
+// @ts-ignore: side-effect CSS import without type declarations
 import "./globals.css";
 
 const roboto = Roboto({
