@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import { useDarkMode } from "../context/DarkModeContext";
@@ -31,7 +31,7 @@ function Stars(props: any) {
     rotation: [0, 0, Math.PI / 4],
   });
   // Generate 5000 random points in a sphere
-  const sphere = useMemo(() => generateSpherePoints(5000, 1.5), []);
+  const sphere = useMemo(() => generateSpherePoints(3000, 1.5), []);
 
   useFrame((state, delta) => {
     if (ref.current) {
@@ -63,11 +63,42 @@ function Stars(props: any) {
 
 const ThreeHero = () => {
   const { isDarkMode } = useDarkMode();
+  const [useStaticFallback, setUseStaticFallback] = useState(false);
+
+  useEffect(() => {
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => {
+      setUseStaticFallback(motionQuery.matches || window.innerWidth < 640);
+    };
+
+    updatePreference();
+    window.addEventListener("resize", updatePreference);
+    motionQuery.addEventListener("change", updatePreference);
+    return () => {
+      window.removeEventListener("resize", updatePreference);
+      motionQuery.removeEventListener("change", updatePreference);
+    };
+  }, []);
+
   return (
-    <div className="absolute inset-0 z-0 h-full w-full">
-      <Canvas camera={{ position: [0, 0, 1] }}>
-        <Stars isDarkMode={isDarkMode} />
-      </Canvas>
+    <div className="absolute inset-0 z-0 h-full w-full" aria-hidden="true">
+      {useStaticFallback ? (
+        <div
+          className={`h-full w-full ${
+            isDarkMode
+              ? "bg-[radial-gradient(ellipse_at_50%_35%,rgba(139,92,246,0.18),transparent_65%)]"
+              : "bg-[radial-gradient(ellipse_at_50%_35%,rgba(76,29,149,0.12),transparent_65%)]"
+          }`}
+        />
+      ) : (
+        <Canvas
+          camera={{ position: [0, 0, 1] }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: false, powerPreference: "low-power" }}
+        >
+          <Stars isDarkMode={isDarkMode} />
+        </Canvas>
+      )}
     </div>
   );
 };
