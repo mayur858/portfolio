@@ -1,165 +1,154 @@
 "use client";
 
 import { Component, type ErrorInfo, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { CanvasTexture, LinearFilter, MeshBasicMaterial, PlaneGeometry } from "three";
 import { useDarkMode } from "../context/DarkModeContext";
-import { TorusKnotGeometry, type Group } from "three";
-
-type ErrorBoundaryState = { hasError: boolean };
 
 class WebGLErrorBoundary extends Component<
   { children: ReactNode; fallback: ReactNode },
-  ErrorBoundaryState
+  { hasError: boolean }
 > {
-  state: ErrorBoundaryState = { hasError: false };
-
-  static getDerivedStateFromError(): ErrorBoundaryState {
-    return { hasError: true };
-  }
-
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
   componentDidCatch(error: Error, info: ErrorInfo) {
-    if (process.env.NODE_ENV !== "production") {
-      console.warn("3D hero unavailable; showing static fallback.", error, info);
-    }
+    if (process.env.NODE_ENV !== "production") console.warn("Matrix hero fallback", error, info);
   }
-
-  render() {
-    return this.state.hasError ? this.props.fallback : this.props.children;
-  }
+  render() { return this.state.hasError ? this.props.fallback : this.props.children; }
 }
 
-function TorusKnot({ isDarkMode, reducedMotion }: { isDarkMode: boolean; reducedMotion: boolean }) {
-  const group = useRef<Group>(null);
-  const geometry = useMemo(() => {
-    // A modest segment count keeps vertex and draw-call costs low.
-    return new TorusKnotGeometry(0.78, 0.22, 96, 8, 2, 3);
-  }, []);
+function MatrixRain({ isDarkMode, isMobile }: { isDarkMode: boolean; isMobile: boolean }) {
+  const { viewport } = useThree();
+  const [material, setMaterial] = useState<MeshBasicMaterial | null>(null);
+  const canvas = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const el = document.createElement("canvas");
+    el.width = isMobile ? 240 : 420;
+    el.height = isMobile ? 360 : 420;
+    return el;
+  }, [isMobile]);
+  const textureRef = useRef<CanvasTexture | null>(null);
+  const geometry = useMemo(() => new PlaneGeometry(1, 1), []);
+  const accumulator = useRef(0);
+  const drops = useMemo(() => Array.from({ length: isMobile ? 16 : 30 }, (_, i) => ({
+    x: (i + 0.5) / (isMobile ? 16 : 30),
+    y: Math.random(),
+    speed: 0.12 + Math.random() * 0.26,
+    length: 5 + Math.floor(Math.random() * 12),
+    glyphs: Array.from({ length: 18 }, () => {
+      const chars = "01アイウエオカキクケコ{}[]<>/\\|";
+      return chars[Math.floor(Math.random() * chars.length)];
+    }),
+  })), [isMobile]);
 
-  useEffect(() => () => geometry.dispose(), [geometry]);
+  useEffect(() => {
+    if (!canvas) return;
+    const texture = new CanvasTexture(canvas);
+    texture.minFilter = LinearFilter;
+    texture.magFilter = LinearFilter;
+    texture.generateMipmaps = false;
+    textureRef.current = texture;
+    const nextMaterial = new MeshBasicMaterial({
+      map: texture, transparent: true, depthWrite: false, toneMapped: false,
+      opacity: isDarkMode ? (isMobile ? 0.22 : 0.28) : 0.15,
+    });
+    setMaterial(nextMaterial);
+    return () => {
+      texture.dispose(); nextMaterial.dispose(); geometry.dispose();
+      textureRef.current = null; setMaterial(null);
+    };
+  }, [canvas, geometry, isDarkMode, isMobile]);
 
-  useFrame((state, delta) => {
-    if (!group.current || reducedMotion) return;
-    const targetX = state.pointer.y * 0.12;
-    const targetY = state.pointer.x * 0.18;
-    group.current.rotation.x += (targetX - group.current.rotation.x) * Math.min(delta * 1.8, 1);
-    group.current.rotation.y += delta * 0.07 + (targetY - group.current.rotation.y) * Math.min(delta, 1);
+  useFrame((_, delta) => {
+    if (!canvas || !textureRef.current) return;
+    accumulator.current += delta;
+    if (accumulator.current < 0.05) return;
+    const dt = accumulator.current; accumulator.current = 0;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const font = isMobile ? 10 : 12;
+    ctx.font = `bold ${font}px monospace`;
+    ctx.textAlign = "center";
+    drops.forEach((drop, i) => {
+      drop.y += drop.speed * dt;
+      if (drop.y > 1.2) drop.y = -Math.random() * 0.8;
+      const normalizedX = isMobile ? drop.x : 0.42 + drop.x * 0.58;
+      for (let row = 0; row < drop.length; row++) {
+        const y = drop.y * canvas.height - row * font;
+        if (y < 0 || y > canvas.height) continue;
+        const alpha = row === 0 ? 0.95 : Math.max(0.1, 0.62 - row / (drop.length + 2));
+        ctx.fillStyle = row === 0
+          ? "rgba(190,255,210,0.95)"
+          : `rgba(74,222,128,${alpha})`;
+        ctx.fillText(drop.glyphs[(row + i) % drop.glyphs.length], normalizedX * canvas.width, y);
+      }
+    });
+    textureRef.current.needsUpdate = true;
   });
 
+  useEffect(() => () => geometry.dispose(), [geometry]);
   return (
-    <group ref={group} rotation={[0.25, 0.15, -0.25]} scale={0.92}>
-      <mesh geometry={geometry}>
-        <meshBasicMaterial
-          color={isDarkMode ? "#a78bfa" : "#5b21b6"}
-          wireframe
-          transparent
-          opacity={isDarkMode ? 0.78 : 0.72}
-        />
-      </mesh>
-      <mesh geometry={geometry} scale={1.015}>
-        <meshBasicMaterial
-          color={isDarkMode ? "#60a5fa" : "#2563eb"}
-          wireframe
-          transparent
-          opacity={0.2}
-        />
-      </mesh>
-    </group>
+    <mesh geometry={geometry} material={material ?? undefined} scale={[viewport.width, viewport.height, 1]} position={[0, 0, -0.2]}>
+      {!material && <meshBasicMaterial transparent opacity={0} />}
+    </mesh>
   );
 }
 
-const StaticFallback = ({ isDarkMode }: { isDarkMode: boolean }) => (
-  <div
-    className={`h-full w-full ${
-      isDarkMode
-        ? "bg-[radial-gradient(ellipse_at_50%_45%,rgba(139,92,246,0.22),transparent_65%)]"
-        : "bg-[radial-gradient(ellipse_at_50%_45%,rgba(76,29,149,0.14),transparent_65%)]"
-    }`}
-    aria-hidden="true"
-  />
-);
+function StaticFallback({ isDarkMode }: { isDarkMode: boolean }) {
+  return <div aria-hidden="true" className={`h-full w-full ${isDarkMode
+    ? "bg-[radial-gradient(ellipse_at_80%_45%,rgba(34,197,94,0.12),transparent_55%),linear-gradient(90deg,#050807,#07130b)]"
+    : "bg-[radial-gradient(ellipse_at_80%_45%,rgba(34,197,94,0.08),transparent_55%)]"}`} />;
+}
 
-const ThreeHero = () => {
+export default function ThreeHero() {
   const { isDarkMode } = useDarkMode();
-  const [shouldRenderCanvas, setShouldRenderCanvas] = useState(false);
+  const [enabled, setEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(true);
-  const [isSmallScreen, setIsSmallScreen] = useState(true);
-  const hostRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(true);
+  const host = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const updatePreferences = () => {
-      setReducedMotion(motionQuery.matches);
-      setIsSmallScreen(window.matchMedia("(max-width: 767px)").matches);
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      setReducedMotion(motion.matches);
+      setIsMobile(window.matchMedia("(max-width: 767px)").matches);
     };
-
-    updatePreferences();
-    motionQuery.addEventListener("change", updatePreferences);
-    window.addEventListener("resize", updatePreferences);
-
+    update();
+    motion.addEventListener("change", update);
+    window.addEventListener("resize", update);
     return () => {
-      motionQuery.removeEventListener("change", updatePreferences);
-      window.removeEventListener("resize", updatePreferences);
+      motion.removeEventListener("change", update);
+      window.removeEventListener("resize", update);
     };
   }, []);
 
   useEffect(() => {
-    // Keep the initial render lightweight. Only prepare WebGL when the hero
-    // is near the viewport, the device is desktop-sized, and motion is allowed.
-    if (reducedMotion || isSmallScreen || typeof IntersectionObserver === "undefined") {
-      setShouldRenderCanvas(false);
-      return;
-    }
-
-    const host = hostRef.current;
-    if (!host) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          const idleWindow = window as Window & {
-            requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
-            cancelIdleCallback?: (id: number) => void;
-          };
-          let idleId: number | undefined;
-          const timeoutId = window.setTimeout(() => setShouldRenderCanvas(true), 900);
-
-          if (idleWindow.requestIdleCallback) {
-            idleId = idleWindow.requestIdleCallback(() => setShouldRenderCanvas(true), { timeout: 1400 });
-          }
-
-          observer.disconnect();
-          return () => {
-            window.clearTimeout(timeoutId);
-            if (idleId !== undefined) idleWindow.cancelIdleCallback?.(idleId);
-          };
-        }
-      },
-      { rootMargin: "120px", threshold: 0.01 },
-    );
-
-    observer.observe(host);
-    return () => observer.disconnect();
-  }, [isSmallScreen, reducedMotion]);
+    if (reducedMotion || typeof IntersectionObserver === "undefined") { setEnabled(false); return; }
+    const element = host.current;
+    if (!element) return;
+    let timer: number | undefined;
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      timer = window.setTimeout(() => setEnabled(true), 500);
+      observer.disconnect();
+    }, { rootMargin: "100px" });
+    observer.observe(element);
+    return () => { observer.disconnect(); if (timer !== undefined) window.clearTimeout(timer); };
+  }, [reducedMotion]);
 
   const fallback = <StaticFallback isDarkMode={isDarkMode} />;
-
   return (
-    <div ref={hostRef} className="absolute inset-0 z-0 h-full w-full pointer-events-none" aria-hidden="true">
-      {shouldRenderCanvas && !isSmallScreen && !reducedMotion ? (
+    <div ref={host} aria-hidden="true" className="absolute inset-0 z-0 h-full w-full pointer-events-none">
+      {enabled && !reducedMotion ? (
         <WebGLErrorBoundary fallback={fallback}>
-          <Canvas
-            camera={{ position: [0, 0, 3.8], fov: 42 }}
-            dpr={[1, 1.25]}
-            frameloop="always"
-            gl={{ alpha: true, antialias: false, powerPreference: "low-power", stencil: false, depth: true }}
-            performance={{ min: 0.5 }}
-          >
-            <TorusKnot isDarkMode={isDarkMode} reducedMotion={reducedMotion} />
+          <Canvas camera={{ position: [0, 0, 2], fov: 50 }} dpr={isMobile ? 1 : [1, 1.2]}
+            gl={{ alpha: true, antialias: false, powerPreference: "low-power", depth: false, stencil: false }}>
+            <MatrixRain isDarkMode={isDarkMode} isMobile={isMobile} />
           </Canvas>
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
         </WebGLErrorBoundary>
       ) : fallback}
     </div>
   );
-};
-
-export default ThreeHero;
+}
