@@ -161,7 +161,7 @@ const HomePage = () => {
               <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60 overflow-hidden">
                 <div className="p-3 pb-0">
                   <img
-                    src="/projects/neural-network-mnist.svg"
+                    src="projects/neural-network-mnist.svg"
                     alt="Ten handwritten digit sample plots from the MNIST dataset used in the neural network project"
                     className="w-full aspect-[16/9] rounded-lg border border-border/50 object-cover"
                     loading="lazy"
