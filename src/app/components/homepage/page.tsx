@@ -5,6 +5,21 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import CommitGraph from "../CommitGraph";
 import ThreeHero from "../ThreeHero";
 
+const trackProjectClick = (projectName: string, linkType: string) => {
+  const gtag = (window as Window & {
+    gtag?: (
+      command: string,
+      eventName: string,
+      params: Record<string, string>
+    ) => void;
+  }).gtag;
+
+  gtag?.("event", "project_link_click", {
+    project_name: projectName,
+    link_type: linkType,
+  });
+};
+
 const HomePage = () => {
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
@@ -81,6 +96,67 @@ const HomePage = () => {
               Projects
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+              {/* Mood Widget */}
+              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60 overflow-hidden">
+                <div className="grid grid-cols-2 gap-2 p-3 pb-0">
+                  <img
+                    src="https://github.com/user-attachments/assets/cd4d6a11-07b0-42b2-8135-4400063a0c92"
+                    alt="Mood Widget running on the Android home screen"
+                    className="h-64 w-full rounded-lg object-cover object-top"
+                    loading="lazy"
+                  />
+                  <img
+                    src="https://github.com/user-attachments/assets/53732fe0-0276-4839-9a7e-beb149e9f343"
+                    alt="Mood Widget displayed on the Android lock screen"
+                    className="h-64 w-full rounded-lg object-cover object-top"
+                    loading="lazy"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl md:text-2xl text-primary">
+                    Mood Widget — Digital Wellbeing
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4 text-muted-foreground">
+                    A dot-matrix wellbeing widget that reflects daily screen
+                    time with a green smile, amber neutral face, and red frown.
+                    Built with Flutter and native Android widget APIs, with
+                    support for Samsung LockStar lock screens.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {["Flutter", "Dart", "Kotlin", "Android AppWidget", "WorkManager"].map((technology) => (
+                      <span
+                        key={technology}
+                        className="rounded-full border border-border/70 bg-muted px-3 py-1 text-xs text-muted-foreground"
+                      >
+                        {technology}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-4">
+                    <a
+                      href="https://github.com/mayur858/Nothing-Widget"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackProjectClick("Mood Widget", "github")}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      View source on GitHub
+                    </a>
+                    <a
+                      href="https://github.com/mayur858/Nothing-Widget#screenshots"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackProjectClick("Mood Widget", "screenshots")}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      View screenshots and setup
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Final Year Project */}
               <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60">
                 <CardHeader>
