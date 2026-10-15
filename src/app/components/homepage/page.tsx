@@ -7,21 +7,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import CommitGraph from "../CommitGraph";
 import ThreeHero from "../ThreeHero";
 
-const trackProjectClick = (projectName: string, linkType: string) => {
-  const gtag = (window as Window & {
-    gtag?: (
-      command: string,
-      eventName: string,
-      params: Record<string, string>
-    ) => void;
-  }).gtag;
-
-  gtag?.("event", "project_link_click", {
-    project_name: projectName,
-    link_type: linkType,
-  });
-};
-
 const HomePage = () => {
   const trackedScrollDepths = useRef(new Set<number>());
 
