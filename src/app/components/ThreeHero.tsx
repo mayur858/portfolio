@@ -50,7 +50,7 @@ function MatrixRain({ isDarkMode, isMobile }: { isDarkMode: boolean; isMobile: b
     textureRef.current = texture;
     const nextMaterial = new MeshBasicMaterial({
       map: texture, transparent: true, depthWrite: false, toneMapped: false,
-      opacity: isDarkMode ? (isMobile ? 0.22 : 0.28) : 0.15,
+      opacity: isDarkMode ? (isMobile ? 0.38 : 0.48) : 0.26,
     });
     setMaterial(nextMaterial);
     return () => {
@@ -79,8 +79,8 @@ function MatrixRain({ isDarkMode, isMobile }: { isDarkMode: boolean; isMobile: b
         if (y < 0 || y > canvas.height) continue;
         const alpha = row === 0 ? 0.95 : Math.max(0.1, 0.62 - row / (drop.length + 2));
         ctx.fillStyle = row === 0
-          ? "rgba(190,255,210,0.95)"
-          : `rgba(74,222,128,${alpha})`;
+          ? "rgba(210,255,220,1)"
+          : `rgba(74,255,120,${Math.min(1, alpha * 1.3)})`;
         ctx.fillText(drop.glyphs[(row + i) % drop.glyphs.length], normalizedX * canvas.width, y);
       }
     });
@@ -97,8 +97,8 @@ function MatrixRain({ isDarkMode, isMobile }: { isDarkMode: boolean; isMobile: b
 
 function StaticFallback({ isDarkMode }: { isDarkMode: boolean }) {
   return <div aria-hidden="true" className={`h-full w-full ${isDarkMode
-    ? "bg-[radial-gradient(ellipse_at_80%_45%,rgba(34,197,94,0.12),transparent_55%),linear-gradient(90deg,#050807,#07130b)]"
-    : "bg-[radial-gradient(ellipse_at_80%_45%,rgba(34,197,94,0.08),transparent_55%)]"}`} />;
+    ? "bg-[radial-gradient(ellipse_at_80%_45%,rgba(34,197,94,0.18),transparent_55%),linear-gradient(90deg,#050807,#07130b)]"
+    : "bg-[radial-gradient(ellipse_at_80%_45%,rgba(34,197,94,0.12),transparent_55%)]"}`} />;
 }
 
 export default function ThreeHero() {
