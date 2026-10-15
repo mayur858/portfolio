@@ -157,6 +157,49 @@ const HomePage = () => {
                 </CardContent>
               </Card>
 
+              {/* Neural Network ML Project */}
+              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60 overflow-hidden">
+                <div className="p-3 pb-0">
+                  <img
+                    src="https://raw.githubusercontent.com/mayur858/portfolio/feat/mood-widget-project-card/public/projects/neural-network-mnist.svg"
+                    alt="Ten handwritten digit sample plots from the MNIST dataset used in the neural network project"
+                    className="w-full aspect-[16/9] rounded-lg border border-border/50 object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl md:text-2xl text-primary">
+                    Neural Network — Handwritten Digit Recognition
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4 text-muted-foreground">
+                    A beginner machine-learning project exploring a
+                    feed-forward neural network for recognizing handwritten
+                    digits from the MNIST dataset with TensorFlow and Keras.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {["Python", "TensorFlow", "Keras", "MNIST"].map((technology) => (
+                      <span
+                        key={technology}
+                        className="rounded-full border border-border/70 bg-muted px-3 py-1 text-xs text-muted-foreground"
+                      >
+                        {technology}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href="https://github.com/mayur858/Neural-Network-ML-Project"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackProjectClick("Neural Network ML Project", "github")}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    View source on GitHub
+                  </a>
+                </CardContent>
+              </Card>
+
               {/* Meals App */}
               <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60">
                 <CardHeader>
@@ -223,48 +266,7 @@ const HomePage = () => {
                 </CardContent>
               </Card>
 
-              {/* Neural Network ML Project */}
-              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60 overflow-hidden">
-                <div className="p-3 pb-0">
-                  <img
-                    src="https://raw.githubusercontent.com/mayur858/portfolio/feat/mood-widget-project-card/public/projects/neural-network-mnist.svg"
-                    alt="Ten handwritten digit sample plots from the MNIST dataset used in the neural network project"
-                    className="w-full aspect-[16/9] rounded-lg border border-border/50 object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-xl md:text-2xl text-primary">
-                    Neural Network — Handwritten Digit Recognition
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-4 text-muted-foreground">
-                    A beginner machine-learning project exploring a
-                    feed-forward neural network for recognizing handwritten
-                    digits from the MNIST dataset with TensorFlow and Keras.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {["Python", "TensorFlow", "Keras", "MNIST"].map((technology) => (
-                      <span
-                        key={technology}
-                        className="rounded-full border border-border/70 bg-muted px-3 py-1 text-xs text-muted-foreground"
-                      >
-                        {technology}
-                      </span>
-                    ))}
-                  </div>
-                  <a
-                    href="https://github.com/mayur858/Neural-Network-ML-Project"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackProjectClick("Neural Network ML Project", "github")}
-                    className="text-primary hover:underline font-medium"
-                  >
-                    View source on GitHub
-                  </a>
-                </CardContent>
-              </Card>
+
             </div>
           </div>
         </section>
