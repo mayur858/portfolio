@@ -1,26 +1,55 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { trackEvent, trackSectionView } from "@/lib/analytics";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import CommitGraph from "../CommitGraph";
 import ThreeHero from "../ThreeHero";
 
-const trackProjectClick = (projectName: string, linkType: string) => {
-  const gtag = (window as Window & {
-    gtag?: (
-      command: string,
-      eventName: string,
-      params: Record<string, string>
-    ) => void;
-  }).gtag;
-
-  gtag?.("event", "project_link_click", {
-    project_name: projectName,
-    link_type: linkType,
-  });
-};
-
 const HomePage = () => {
+  const trackedScrollDepths = useRef(new Set<number>());
+
+  useEffect(() => {
+    const sectionIds = ["home", "about", "projects", "skills", "experience", "get-in-touch"];
+    const visibleSections = new Set<string>();
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !visibleSections.has(entry.target.id)) {
+            visibleSections.add(entry.target.id);
+            trackSectionView(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.35 },
+    );
+
+    sectionIds.forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) sectionObserver.observe(section);
+    });
+
+    const onScroll = () => {
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollableHeight <= 0) return;
+      const percentage = Math.min(100, Math.round((window.scrollY / scrollableHeight) * 100));
+      [25, 50, 75, 100].forEach((threshold) => {
+        if (percentage >= threshold && !trackedScrollDepths.current.has(threshold)) {
+          trackedScrollDepths.current.add(threshold);
+          trackEvent("portfolio_scroll_depth", { percent: threshold });
+        }
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      sectionObserver.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
       {/* Main Content Area */}
@@ -139,7 +168,7 @@ const HomePage = () => {
                       href="https://github.com/mayur858/Nothing-Widget"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => trackProjectClick("Mood Widget", "github")}
+                      onClick={() => trackEvent("project_link_click", { project_name: "Mood Widget", link_type: "github" })}
                       className="text-primary hover:underline font-medium"
                     >
                       View source on GitHub
@@ -148,7 +177,7 @@ const HomePage = () => {
                       href="https://github.com/mayur858/Nothing-Widget#screenshots"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => trackProjectClick("Mood Widget", "screenshots")}
+                      onClick={() => trackEvent("project_link_click", { project_name: "Mood Widget", link_type: "screenshots" })}
                       className="text-primary hover:underline font-medium"
                     >
                       View screenshots and setup
@@ -192,7 +221,7 @@ const HomePage = () => {
                     href="https://github.com/mayur858/Neural-Network-ML-Project"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => trackProjectClick("Neural Network ML Project", "github")}
+                    onClick={() => trackEvent("project_link_click", { project_name: "Neural Network ML Project", link_type: "github" })}
                     className="text-primary hover:underline font-medium"
                   >
                     View source on GitHub
@@ -222,6 +251,7 @@ const HomePage = () => {
                     <li>
                       <a
                         href="https://github.com/mayur858/meals_app"
+                        onClick={() => trackEvent("project_link_click", { project_name: "Meals App", link_type: "github" })}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:underline font-medium"
@@ -255,6 +285,7 @@ const HomePage = () => {
                     <li>
                       <a
                         href="https://github.com/mayur858/shopping_list"
+                        onClick={() => trackEvent("project_link_click", { project_name: "Shopping List App", link_type: "github" })}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:underline font-medium"

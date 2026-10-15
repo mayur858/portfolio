@@ -2,6 +2,7 @@
 
 import { Github, Linkedin, Mail, MapPin, Phone, Heart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { trackEvent } from "@/lib/analytics";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -49,6 +50,7 @@ const Footer = () => {
                 <a
                   key={social.label}
                   href={social.href}
+                  onClick={() => trackEvent("contact_click", { contact_method: social.label.toLowerCase(), placement: "footer_social" })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg transition-colors duration-200 bg-background hover:bg-primary/10 text-muted-foreground hover:text-primary border border-border/50 hover:border-primary/30"
@@ -73,6 +75,7 @@ const Footer = () => {
                 <Mail className="w-4 h-4 mr-3 text-primary group-hover:scale-110 transition-transform" />
                 <a
                   href="mailto:kumarmayur.2001@gmail.com"
+                  onClick={() => trackEvent("contact_click", { contact_method: "email", placement: "footer" })}
                   className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   kumarmayur.2001@gmail.com
@@ -82,6 +85,7 @@ const Footer = () => {
                 <Phone className="w-4 h-4 mr-3 text-primary group-hover:scale-110 transition-transform" />
                 <a
                   href="tel:+919773064120"
+                  onClick={() => trackEvent("contact_click", { contact_method: "phone", placement: "footer" })}
                   className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   +91 9773064120
