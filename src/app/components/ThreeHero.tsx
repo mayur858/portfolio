@@ -3,6 +3,7 @@
 import { Component, type ErrorInfo, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useDarkMode } from "../context/DarkModeContext";
+import { TorusKnotGeometry, type Group } from "three";
 
 type ErrorBoundaryState = { hasError: boolean };
 
@@ -28,10 +29,10 @@ class WebGLErrorBoundary extends Component<
 }
 
 function TorusKnot({ isDarkMode, reducedMotion }: { isDarkMode: boolean; reducedMotion: boolean }) {
-  const group = useRef<THREE.Group>(null);
+  const group = useRef<Group>(null);
   const geometry = useMemo(() => {
     // A modest segment count keeps vertex and draw-call costs low.
-    return new (require("three").TorusKnotGeometry)(0.78, 0.22, 96, 8, 2, 3);
+    return new TorusKnotGeometry(0.78, 0.22, 96, 8, 2, 3);
   }, []);
 
   useEffect(() => () => geometry.dispose(), [geometry]);
