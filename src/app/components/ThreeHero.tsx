@@ -73,7 +73,9 @@ function MatrixRain({ isDarkMode, isMobile }: { isDarkMode: boolean; isMobile: b
     drops.forEach((drop, i) => {
       drop.y += drop.speed * dt;
       if (drop.y > 1.2) drop.y = -Math.random() * 0.8;
-      const normalizedX = isMobile ? drop.x : 0.42 + drop.x * 0.58;
+      // Spread the Matrix streams across the full canvas so the left side
+      // stays visually alive while the gradient keeps the headline readable.
+      const normalizedX = drop.x;
       for (let row = 0; row < drop.length; row++) {
         const y = drop.y * canvas.height - row * font;
         if (y < 0 || y > canvas.height) continue;
