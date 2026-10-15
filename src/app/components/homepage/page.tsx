@@ -5,6 +5,21 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import CommitGraph from "../CommitGraph";
 import ThreeHero from "../ThreeHero";
 
+const trackProjectClick = (projectName: string, linkType: string) => {
+  const gtag = (window as Window & {
+    gtag?: (
+      command: string,
+      eventName: string,
+      params: Record<string, string>
+    ) => void;
+  }).gtag;
+
+  gtag?.("event", "project_link_click", {
+    project_name: projectName,
+    link_type: linkType,
+  });
+};
+
 const HomePage = () => {
   return (
     <div className="min-h-screen w-full bg-background text-foreground">
@@ -81,29 +96,107 @@ const HomePage = () => {
               Projects
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-              {/* Final Year Project */}
-              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60">
+              {/* Mood Widget */}
+              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60 overflow-hidden">
+                <div className="grid grid-cols-2 items-start gap-3 p-3 pb-0">
+                  <img
+                    src="https://github.com/user-attachments/assets/cd4d6a11-07b0-42b2-8135-4400063a0c92"
+                    alt="Mood Widget running on the Android home screen"
+                    className="block aspect-[3/4] w-full rounded-lg border border-border/50 object-contain bg-muted/30"
+                    loading="lazy"
+                  />
+                  <img
+                    src="https://github.com/user-attachments/assets/53732fe0-0276-4839-9a7e-beb149e9f343"
+                    alt="Mood Widget displayed on the Android lock screen"
+                    className="block aspect-[3/4] w-full rounded-lg border border-border/50 object-contain bg-muted/30"
+                    loading="lazy"
+                  />
+                </div>
                 <CardHeader>
                   <CardTitle className="text-xl md:text-2xl text-primary">
-                    Final Year Project — Odd Job Services Web Platform
+                    Mood Widget — Digital Wellbeing
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="mb-4 text-muted-foreground">
-                    A web platform to connect local odd job service providers
-                    like plumbers and electricians with users in need.
+                    A dot-matrix wellbeing widget that reflects daily screen
+                    time with a green smile, amber neutral face, and red frown.
+                    Built with Flutter and native Android widget APIs, with
+                    support for Samsung LockStar lock screens.
                   </p>
-                  <ul className="list-disc list-inside text-sm space-y-2 text-foreground/80">
-                    <li>
-                      Developed frontend using HTML, CSS, and JavaScript for an
-                      intuitive UI.
-                    </li>
-                    <li>
-                      Used MySQL as the backend database for user and service
-                      data.
-                    </li>
-                    <li>Focused on usability and functional design.</li>
-                  </ul>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {["Flutter", "Dart", "Kotlin", "Android AppWidget", "WorkManager"].map((technology) => (
+                      <span
+                        key={technology}
+                        className="rounded-full border border-border/70 bg-muted px-3 py-1 text-xs text-muted-foreground"
+                      >
+                        {technology}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-4">
+                    <a
+                      href="https://github.com/mayur858/Nothing-Widget"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackProjectClick("Mood Widget", "github")}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      View source on GitHub
+                    </a>
+                    <a
+                      href="https://github.com/mayur858/Nothing-Widget#screenshots"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackProjectClick("Mood Widget", "screenshots")}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      View screenshots and setup
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Neural Network ML Project */}
+              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60 overflow-hidden">
+                <div className="p-3 pb-0">
+                  <img
+                    src="/projects/neural-network-mnist.svg"
+                    alt="Ten handwritten digit sample plots from the MNIST dataset used in the neural network project"
+                    className="w-full aspect-[16/9] rounded-lg border border-border/50 object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl md:text-2xl text-primary">
+                    Neural Network — Handwritten Digit Recognition
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4 text-muted-foreground">
+                    A beginner machine-learning project exploring a
+                    feed-forward neural network for recognizing handwritten
+                    digits from the MNIST dataset with TensorFlow and Keras.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {["Python", "TensorFlow", "Keras", "MNIST"].map((technology) => (
+                      <span
+                        key={technology}
+                        className="rounded-full border border-border/70 bg-muted px-3 py-1 text-xs text-muted-foreground"
+                      >
+                        {technology}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href="https://github.com/mayur858/Neural-Network-ML-Project"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackProjectClick("Neural Network ML Project", "github")}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    View source on GitHub
+                  </a>
                 </CardContent>
               </Card>
 
@@ -128,7 +221,7 @@ const HomePage = () => {
                     </li>
                     <li>
                       <a
-                        href="https://github.com/mayur858"
+                        href="https://github.com/mayur858/meals_app"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:underline font-medium"
@@ -161,7 +254,7 @@ const HomePage = () => {
                     </li>
                     <li>
                       <a
-                        href="https://github.com/mayur858"
+                        href="https://github.com/mayur858/shopping_list"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:underline font-medium"
@@ -173,37 +266,7 @@ const HomePage = () => {
                 </CardContent>
               </Card>
 
-              {/* Neural Network ML Project */}
-              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60">
-                <CardHeader>
-                  <CardTitle className="text-xl md:text-2xl text-primary">
-                    Neural Network ML Project
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-4 text-muted-foreground">
-                    A machine learning project to predict handwritten numbers
-                    using TensorFlow.
-                  </p>
-                  <ul className="list-disc list-inside text-sm space-y-2 text-foreground/80">
-                    <li>
-                      Trained a neural network model to identify digits from
-                      image datasets.
-                    </li>
-                    <li>Built using TensorFlow and Google Colab.</li>
-                    <li>
-                      <a
-                        href="https://github.com/mayur858"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline font-medium"
-                      >
-                        GitHub Link
-                      </a>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
+
             </div>
           </div>
         </section>
