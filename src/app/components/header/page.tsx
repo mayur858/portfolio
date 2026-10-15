@@ -5,6 +5,7 @@ import BorderGradientButton from "../ui/BorderGradientButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu, X, Download, Sun, Moon, Eye } from "lucide-react";
 import { useDarkMode } from "../../context/DarkModeContext";
+import { trackEvent } from "@/lib/analytics";
 
 const Header = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -166,6 +167,7 @@ const Header = () => {
             <div className="hidden sm:flex items-center gap-2">
               <BorderGradientButton
                 href={resumeHref}
+                onClick={() => trackEvent("resume_view", { placement: "header" })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 text-sm font-medium transition-transform hover:scale-105"
@@ -177,6 +179,7 @@ const Header = () => {
               </BorderGradientButton>
               <a
                 href={resumeHref}
+                onClick={() => trackEvent("resume_download", { placement: "header" })}
                 download={resumeDownloadName}
                 className="p-3 rounded-full border border-border/60 text-foreground transition-colors duration-200 hover:bg-accent hover:text-accent-foreground"
                 aria-label="Download resume"
@@ -227,7 +230,7 @@ const Header = () => {
               onPointerUp={handleResumePressEnd}
               onPointerCancel={handleResumePressEnd}
               onPointerLeave={handleResumePressEnd}
-              onClick={handleMobileResumeClick}
+              onClick={(e) => { trackEvent("resume_download", { placement: "mobile_menu" }); handleMobileResumeClick(e); }}
               onContextMenu={(e) => e.preventDefault()}
               aria-label="Tap to download resume. Press and hold to view resume."
               title="Tap to download. Press and hold to view."
