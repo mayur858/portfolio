@@ -97,6 +97,7 @@ const Header = () => {
       return;
     }
 
+    trackEvent("resume_download", { placement: "mobile_menu" });
     setIsMenuOpen(false);
   };
 
@@ -230,7 +231,7 @@ const Header = () => {
               onPointerUp={handleResumePressEnd}
               onPointerCancel={handleResumePressEnd}
               onPointerLeave={handleResumePressEnd}
-              onClick={(e) => { trackEvent("resume_download", { placement: "mobile_menu" }); handleMobileResumeClick(e); }}
+              onClick={handleMobileResumeClick}
               onContextMenu={(e) => e.preventDefault()}
               aria-label="Tap to download resume. Press and hold to view resume."
               title="Tap to download. Press and hold to view."
