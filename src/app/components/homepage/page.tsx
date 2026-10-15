@@ -98,17 +98,17 @@ const HomePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
               {/* Mood Widget */}
               <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60 overflow-hidden">
-                <div className="grid grid-cols-2 gap-2 p-3 pb-0">
+                <div className="grid grid-cols-2 items-start gap-3 p-3 pb-0">
                   <img
                     src="https://github.com/user-attachments/assets/cd4d6a11-07b0-42b2-8135-4400063a0c92"
                     alt="Mood Widget running on the Android home screen"
-                    className="h-64 w-full rounded-lg object-cover object-top"
+                    className="block aspect-[3/4] w-full rounded-lg border border-border/50 object-contain bg-muted/30"
                     loading="lazy"
                   />
                   <img
                     src="https://github.com/user-attachments/assets/53732fe0-0276-4839-9a7e-beb149e9f343"
                     alt="Mood Widget displayed on the Android lock screen"
-                    className="h-64 w-full rounded-lg object-cover object-top"
+                    className="block aspect-[3/4] w-full rounded-lg border border-border/50 object-contain bg-muted/30"
                     loading="lazy"
                   />
                 </div>
