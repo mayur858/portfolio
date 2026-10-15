@@ -157,32 +157,6 @@ const HomePage = () => {
                 </CardContent>
               </Card>
 
-              {/* Final Year Project */}
-              <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60">
-                <CardHeader>
-                  <CardTitle className="text-xl md:text-2xl text-primary">
-                    Final Year Project — Odd Job Services Web Platform
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-4 text-muted-foreground">
-                    A web platform to connect local odd job service providers
-                    like plumbers and electricians with users in need.
-                  </p>
-                  <ul className="list-disc list-inside text-sm space-y-2 text-foreground/80">
-                    <li>
-                      Developed frontend using HTML, CSS, and JavaScript for an
-                      intuitive UI.
-                    </li>
-                    <li>
-                      Used MySQL as the backend database for user and service
-                      data.
-                    </li>
-                    <li>Focused on usability and functional design.</li>
-                  </ul>
-                </CardContent>
-              </Card>
-
               {/* Meals App */}
               <Card className="bg-card hover:shadow-xl transition-all duration-300 border-border/60">
                 <CardHeader>
@@ -204,7 +178,7 @@ const HomePage = () => {
                     </li>
                     <li>
                       <a
-                        href="https://github.com/mayur858"
+                        href="https://github.com/mayur858/meals_app"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:underline font-medium"
@@ -237,7 +211,7 @@ const HomePage = () => {
                     </li>
                     <li>
                       <a
-                        href="https://github.com/mayur858"
+                        href="https://github.com/mayur858/shopping_list"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:underline font-medium"
@@ -269,7 +243,7 @@ const HomePage = () => {
                     <li>Built using TensorFlow and Google Colab.</li>
                     <li>
                       <a
-                        href="https://github.com/mayur858"
+                        href="https://github.com/mayur858/Neural-Network-ML-Project"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-primary hover:underline font-medium"
