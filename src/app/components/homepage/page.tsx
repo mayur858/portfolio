@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import CommitGraph from "../CommitGraph";
-import ThreeHero from "../ThreeHero";
+import MatrixRain from "../MatrixRain";
 
 const trackProjectClick = (projectName: string, linkType: string) => {
   const gtag = (window as Window & {
@@ -30,7 +30,7 @@ const HomePage = () => {
           id="home"
           className="min-h-screen flex items-center bg-background relative overflow-hidden"
         >
-          <ThreeHero />
+          <MatrixRain />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
             <div className="text-center">
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
