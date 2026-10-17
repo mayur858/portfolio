@@ -17,8 +17,8 @@ import { useDarkMode } from "../context/DarkModeContext";
 
 // --- Look & feel ------------------------------------------------------------
 const THEME = {
-  dark: { color: "#22c55e", opacity: 0.7 },
-  light: { color: "#047857", opacity: 0.5 },
+  dark: { color: "#39ff70", opacity: 0.86 },
+  light: { color: "#047857", opacity: 0.62 },
 } as const;
 
 const CELL_SIZE = { desktop: 18, mobile: 14 }; // CSS px per glyph cell
@@ -146,11 +146,14 @@ const fragmentShader = /* glsl */ `
     // bottom so the effect melts into the next section.
     vec2 p = gl_FragCoord.xy / uRes;
     float centre = length((p - 0.5) * vec2(uRes.x / uRes.y, 1.0));
-    float vignette = mix(0.3, 1.0, smoothstep(0.1, 0.65, centre));
+    float vignette = mix(0.48, 1.0, smoothstep(0.1, 0.65, centre));
     float bottom = smoothstep(0.0, 0.3, p.y);
 
     float alpha = glyph * strength * isOn * vignette * bottom * uOpacity;
-    gl_FragColor = vec4(uColor, alpha);
+    // Make the leading glyph of each stream visibly brighter than its trail.
+    float headGlow = (1.0 - smoothstep(0.0, 1.25, d)) * step(0.0, d);
+    vec3 headColor = mix(uColor, vec3(0.72, 1.0, 0.78), headGlow * 0.95);
+    gl_FragColor = vec4(headColor, alpha);
     #include <colorspace_fragment>
   }
 `;
@@ -163,7 +166,7 @@ function Rain({
   isDarkMode: boolean;
   reducedMotion: boolean;
 }) {
-  const { size, viewport, invalidate } = useThree();
+  const { size, gl, invalidate } = useThree();
   const atlas = useMemo(() => buildAtlas(), []);
 
   const uniforms = useMemo(
@@ -183,13 +186,13 @@ function Rain({
 
   // Resolution / cell size.
   useEffect(() => {
-    const dpr = viewport.dpr;
+    const dpr = gl.getPixelRatio();
     const cssCell =
       size.width < MOBILE_BREAKPOINT ? CELL_SIZE.mobile : CELL_SIZE.desktop;
     uniforms.uRes.value.set(size.width * dpr, size.height * dpr);
     uniforms.uCell.value = cssCell * dpr;
     invalidate();
-  }, [size.width, size.height, viewport.dpr, uniforms, invalidate]);
+  }, [size.width, size.height, gl, uniforms, invalidate]);
 
   // Theme.
   useEffect(() => {
